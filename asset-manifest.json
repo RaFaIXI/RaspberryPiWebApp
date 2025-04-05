@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/RaspberryPiWebApp/static/css/main.d2c79aec.css",
+    "main.js": "/RaspberryPiWebApp/static/js/main.8be18b18.js",
+    "index.html": "/RaspberryPiWebApp/index.html",
+    "main.d2c79aec.css.map": "/RaspberryPiWebApp/static/css/main.d2c79aec.css.map",
+    "main.8be18b18.js.map": "/RaspberryPiWebApp/static/js/main.8be18b18.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d2c79aec.css",
+    "static/js/main.8be18b18.js"
+  ]
+}
