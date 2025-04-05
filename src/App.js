@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ButtonReload from "./components/ReloadButton";
 import Card from "./components/Card";
+import Header from "./components/Header";
 import "./App.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -73,7 +74,8 @@ function App() {
   //render en jsx (html sur un fichier javascript)
   return (
     <div>
-      <div className="header">
+      <Header></Header>
+      <div className="HeaderPage1">
       <h1>API Data</h1>
       </div>
 

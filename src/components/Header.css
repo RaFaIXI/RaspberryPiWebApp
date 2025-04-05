@@ -1,0 +1,10 @@
+
+.header {
+    padding: 1rem;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .header h1 {
+    color: #362828;
+  }
