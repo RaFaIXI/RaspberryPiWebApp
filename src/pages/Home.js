@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ButtonReload from "../components/ReloadButton";
 import Card from "../components/Card";
 import Header from "../components/Header";
+import Footer from "../components/Footer"; 
 import "./Home.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -88,6 +89,8 @@ const Home = () => {
           checked={ischecked}
         />
       </h4>
+        <Footer />
+
     </div>
   );
 };

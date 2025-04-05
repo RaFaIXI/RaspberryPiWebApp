@@ -1,9 +1,9 @@
 import React from 'react';
 import Header from '../components/Header';
-
+import Footer from "../components/Footer";         
 const AboutUs = () => {
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+        <div >
             <Header />
             <h1>About Us</h1>
             <p>
@@ -15,6 +15,7 @@ const AboutUs = () => {
             <p>
                 Thank you for visiting our website. Feel free to explore and learn more about what we do!
             </p>
+            <Footer />
         </div>
     );
 };

@@ -1,0 +1,29 @@
+/* Ensures the body and html take up the full height */
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+/* Styles for the footer */
+.footer {
+    position: fixed;    /* Fixed position at the bottom of the screen */
+    bottom: 0;          /* Align to the bottom */
+    left: 0;            /* Align to the left */
+    width: 100%;        /* Full width */
+    background-color: #333; /* Footer background color */
+    color: white;       /* Footer text color */
+    text-align: center; /* Center the text */
+    padding: 20px;      /* Padding inside the footer */
+    z-index: 1000;      /* Ensure the footer is above other content */
+}
+
+/* Optional: Styling for links inside the footer */
+.footer a {
+    color: white;       /* Make links white */
+    text-decoration: none; /* Remove underline */
+    margin: 0 10px;
+}
+
+.footer a:hover {
+    text-decoration: underline; /* Underline on hover */
+}

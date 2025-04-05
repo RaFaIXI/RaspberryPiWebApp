@@ -1,10 +1,20 @@
-
+/* Header styles */
 .header {
-    padding: 1rem;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .header h1 {
-    color: #362828;
-  }
+  position: fixed; /* Fix the header to the top */
+  top: 0;          /* Align it to the top of the screen */
+  left: 0;         /* Align it to the left */
+  width: 100%;     /* Ensure the header spans the entire width of the viewport */
+  background-color: #fff; /* Optional: background color for the header */
+  padding: 1rem;   /* Padding for header content */
+  text-align: center; /* Center the text */
+  z-index: 1000;    /* Ensure the header stays on top of other content */
+}
+
+
+
+/* Header title styling */
+.header h1 {
+  color: #362828;
+  margin: 0; /* Optional: removes any default margin */
+  padding: 0; /* Optional: removes any default padding */
+}
