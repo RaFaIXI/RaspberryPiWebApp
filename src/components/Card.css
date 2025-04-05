@@ -1,0 +1,93 @@
+/* Card.css */
+.stat-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+    margin: 0.5rem;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .stat-info h2 {
+    font-size: 1rem;
+    color: #666;
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+  }
+  
+  .stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.75rem;
+    margin-left: 1rem;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 60%;
+  }
+  
+  /* Stat icon types */
+  .cpu-temp {
+    background-color: #ffeceb;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b6b' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a1 1 0 0 0-1 1v7.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.414 0l3-3a1 1 0 0 0-1.414-1.414L13 10.586V3a1 1 0 0 0-1-1zM6 14a1 1 0 0 0-1 1v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3a1 1 0 1 0-2 0v3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1z'/%3E%3C/svg%3E");
+  }
+  
+  .cpu-usage {
+    background-color: #e3f2fd;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%232196f3' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h8v8H8V8zm2 2v4h4v-4h-4z'/%3E%3C/svg%3E");
+  }
+  
+  .disk-usage {
+    background-color: #e8f5e9;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%234caf50' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z'/%3E%3C/svg%3E");
+  }
+  
+  .ram-usage {
+    background-color: #fff8e1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffc107' viewBox='0 0 24 24'%3E%3Cpath d='M2 2v20h20V2H2zm18 18H4V4h16v16zM15 6H9v2h6V6zm0 10h2V8h-2v8zM13 8h-2v8h2V8zm-4 8h2V8H9v8zM7 8H5v8h2V8z'/%3E%3C/svg%3E");
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .stat-card {
+      max-width: 100%;
+      padding: 1rem;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .stat-info {
+      margin-top: 1rem;
+    }
+  }
+  
+
+  
+
+  

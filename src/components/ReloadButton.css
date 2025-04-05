@@ -1,0 +1,16 @@
+.button-reload {
+  
+
+
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  border: none; /* Remove the default border */
+  background-color: #4CAF50; /* Initial background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Pointer cursor on hover */
+  
+}
+
+.button-reload:hover {
+  background-color: #45a049; /* Background color when hovered */
+}
