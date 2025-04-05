@@ -43,13 +43,9 @@ function ToDoList() {
             newReturnedList.push(element);
             
         });
-        
-    
+
         newReturnedList.push("do new task");
         setTodolist(newReturnedList);
-
-
-
     }
     
 

@@ -12,8 +12,12 @@ const Home = () => {
   const [a, setA] = useState(0);
   const [ischecked, setCheck] = useState(true);
 
+
+
+
+
   // Fetch data
-  const fetchData = async (e) => {
+  async function fetchData(e) {
     console.log(e);
     try {
       const now = new Date();
@@ -71,8 +75,9 @@ const Home = () => {
       </div>
 
       <h2>Reloads : {a}</h2>
+
       <div className="button-container">
-        <ButtonReload onReload={fetchData} buttontext="reload me" />
+        <ButtonReload onReload={fetchData} reloadParams={["button"]} buttontext="reload me" />
       </div>
       <h4>
         auto reload :{" "}
