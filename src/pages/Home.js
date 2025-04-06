@@ -5,23 +5,75 @@ import Header from "../components/Header";
 import Footer from "../components/Footer"; 
 import "./Home.css";
 
-const API_URL = process.env.REACT_APP_API_URL;
 
-const Home = () => {
+
+const API_URL = process.env.REACT_APP_API_URL;
+const API_URL_Generate =process.env.REACT_APP_API_URL2;
+
+
+function Home () {
   // State
   const [data, setData] = useState("");
   const [a, setA] = useState(0);
-  const [ischecked, setCheck] = useState(true);
+  const [ischecked, setCheck] = useState(false);
 
+  // Generate a random nonce 
+  function generateRandomNonce() {
+    const array = new Uint32Array(7);  // This generates 7 random 32-bit integers.
+    window.crypto.getRandomValues(array);  // Fill the array with random values
+    return array.join('');  // Convert the array to a string
+  };
 
+  // Generate the HMAC signature
+  async function getSignature(playerId,timestamp,nonce) {
+  const payload = {
+    player_id: playerId,
+    timestamp: timestamp.toString(),
+    nonce: nonce
+  };
+  try {
+    const response = await fetch(API_URL_Generate, {
+      method: 'POST',
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
 
+    if (response.ok) {
+      const data = await response.json();
 
+      const signature = data.signature;
 
-  // Fetch data
+      if (signature) {
+        console.log("Signature received");
+        return signature;
+      } else {
+        console.error("No signature received.");
+        return null;
+      }
+    } else {
+      console.error("Failed to fetch signature:", response.status, response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching signature:", error);
+    return null;
+  }
+}
+
+  
+  // Fetch data with signature
   async function fetchData(e) {
     console.log(e);
     try {
+      const playerId = "player123"; // Example playerId
       const now = new Date();
+      const timestamp = Math.floor(now.getTime() / 1000).toString(); // Get current timestamp in seconds
+      const nonce = generateRandomNonce(); // Generate a random nonce
+
+      var signature = await getSignature(playerId, timestamp, nonce); // Generate the signature
       const timeStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
       console.log("Fetching data... now:", timeStr);
 
@@ -30,6 +82,10 @@ const Home = () => {
         headers: {
           "ngrok-skip-browser-warning": "true",
           "Content-Type": "application/json",
+          "player_id": playerId,
+          "timestamp": timestamp,
+          "nonce": nonce,
+          "signature": signature,
         },
       });
 
@@ -41,7 +97,7 @@ const Home = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }
 
   // Checkbox toggle
   const checkboxScript = () => {
@@ -89,8 +145,7 @@ const Home = () => {
           checked={ischecked}
         />
       </h4>
-        <Footer />
-
+      <Footer />
     </div>
   );
 };
