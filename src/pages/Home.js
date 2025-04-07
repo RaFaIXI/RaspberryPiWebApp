@@ -9,13 +9,12 @@ import "./Home.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const API_URL_Generate =process.env.REACT_APP_API_URL2;
-const SECRET_KEY = process.env.REACT_APP_API_HMAC_Key;
-
+var eazjo="";
 
 async function generateSignature2(playerId, timestamp, nonce) {
   const message = `${playerId}${timestamp}${nonce}`;
   const encoder = new TextEncoder();
-  const keyData = encoder.encode(SECRET_KEY);
+  const keyData = encoder.encode(eazjo);
   const data = encoder.encode(message);
 
   try {
@@ -43,6 +42,23 @@ function Home () {
   const [data, setData] = useState("");
   const [a, setA] = useState(0);
   const [ischecked, setCheck] = useState(false);
+  var [isstartup,setstartup]=useState(false);
+
+
+
+
+
+
+
+  useEffect(() => {
+    // Call on startup function here
+    if (isstartup==false){
+      for (let i = 0; i < process.env.REACT_APP_API_HMAC_Key.length; i++) {
+        eazjo += process.env.REACT_APP_API_HMAC_Key[i];
+      }
+    }
+      setstartup(true)
+    });
 
   // Generate a random nonce 
   function generateRandomNonce() {
