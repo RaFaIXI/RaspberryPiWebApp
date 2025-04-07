@@ -11,6 +11,40 @@ const API_URL = process.env.REACT_APP_API_URL;
 const API_URL_Generate =process.env.REACT_APP_API_URL2;
 
 
+
+
+
+
+
+
+const SECRET_KEY = "gragasss"; // Replace with your actual secret key
+
+async function generateSignature2(playerId, timestamp, nonce) {
+  const message = `${playerId}${timestamp}${nonce}`;
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(SECRET_KEY);
+  const data = encoder.encode(message);
+
+  try {
+    const key = await crypto.subtle.importKey(
+      "raw", // The key is raw, meaning it's not in a specific format
+      keyData,
+      { name: "HMAC", hash: { name: "SHA-256" } },
+      false, // The key is not extractable
+      ["sign"]
+    );
+    
+    const signatureBuffer = await crypto.subtle.sign("HMAC", key, data);
+    const signatureArray = new Uint8Array(signatureBuffer);
+    return Array.from(signatureArray)
+      .map(byte => byte.toString(16).padStart(2, '0'))
+      .join('');
+  } catch (error) {
+    console.error("Error generating signature:", error);
+    return null;
+  }
+}
+
 function Home () {
   // State
   const [data, setData] = useState("");
@@ -77,6 +111,10 @@ function Home () {
       const timeStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
       console.log("Fetching data... now:", timeStr);
 
+      var nonce2 = generateRandomNonce(); // Generate a random nonce
+      var signature2= await generateSignature2(playerId,timestamp,nonce2)
+
+
       const response = await fetch(API_URL, {
         method: "GET",
         headers: {
@@ -86,6 +124,8 @@ function Home () {
           "timestamp": timestamp,
           "nonce": nonce,
           "signature": signature,
+          "nonce2": nonce2,
+          "signature2": signature2,
         },
       });
 
