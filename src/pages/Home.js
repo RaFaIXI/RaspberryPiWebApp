@@ -9,15 +9,8 @@ import "./Home.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const API_URL_Generate =process.env.REACT_APP_API_URL2;
+const SECRET_KEY = process.env.REACT_APP_API_HMAC_Key;
 
-
-
-
-
-
-
-
-const SECRET_KEY = "gragasss"; // Replace with your actual secret key
 
 async function generateSignature2(playerId, timestamp, nonce) {
   const message = `${playerId}${timestamp}${nonce}`;
