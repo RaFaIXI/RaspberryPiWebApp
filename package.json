@@ -1,5 +1,5 @@
 {
-  "homepage":"http://RaFaIXI.github.io/RaspberryPiWebApp",
+  "homepage": "http://RaFaIXI.github.io/RaspberryPiWebApp",
   "name": "raspberry_pi_webapp",
   "version": "0.1.0",
   "private": true,
@@ -8,6 +8,9 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.8.4",
+    "crypto-js": "^4.2.0",
+    "jsrsasign": "^11.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.5.0",
