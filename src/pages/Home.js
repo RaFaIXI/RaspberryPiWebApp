@@ -324,13 +324,18 @@ function bufferToBase64(buffer) {
 
   useEffect(() => {
     // Call on startup function here
+    if (!eazjo) {
+
     if (isstartup==false){
       for (let i = 0; i < process.env.REACT_APP_API_HMAC_Key.length; i++) {
         eazjo += process.env.REACT_APP_API_HMAC_Key[i];
       }
     }
       setstartup(true)
+    }
     });
+  
+    // called only once when the component mounts
 
   // Generate a random nonce 
   function generateRandomNonce() {
