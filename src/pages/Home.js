@@ -4,6 +4,8 @@ import Card from "../components/Card";
 import Header from "../components/Header";
 import Footer from "../components/Footer"; 
 import "./Home.css";
+import { Paillier } from 'paillier-bigint';
+import bigInt from "big-integer";
 
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -300,65 +302,12 @@ function bufferToBase64(buffer) {
 
 
 
-async function AESmainFlow() {
-    
-  // Load server keys
-  const keys = await load_server_keys();
-  
-  // Generate client key pair
-  const { client_private_key, client_public_key } = await client_generate_keypair();
-  
-  // Validate server public key
-  if (!(keys.publicKey instanceof CryptoKey)) {
-    console.error("Server public key is not a valid CryptoKey object");
-    throw new Error("Invalid server public key");
-  }
-  
-  
-  // Establish AES key using the server's public key
-  const { aesKey, iv, encryptedPreMasterSecret } = await establishAESKey(
-    client_private_key, 
-    keys.publicKey
-  );
-  
-
-  // Encrypt data using AES-GCM
-  const dataToEncrypt = "Hello, this is a test message!";
-
-  const { ciphertext } = await encryptWithAES(aesKey, iv, dataToEncrypt);
-
-  //decryt data using AES-GCM
-  const decryptedData = await decryptWithAES(aesKey, iv, ciphertext);
-
-
-
-  const ciphertextB64 = bufferToBase64(ciphertext);
-  const ivB64 = bufferToBase64(iv);
-  const encryptedPreMasterSecretB64 = bufferToBase64(encryptedPreMasterSecret);
-
-  const response = await fetch(process.env.REACT_APP_API_URL3 + "/aes", {
-    method: "GET",
-    headers: {
-      "ngrok-skip-browser-warning": "true",
-      "Content-Type": "application/json",
-      
-      "ciphertext": ciphertextB64,
-      "iv": ivB64,
-      "encryptedPreMasterSecret": encryptedPreMasterSecretB64,
- 
-    },
-  });
 
 
 
 
 
 
-
-
-
-
-}
 
 
 
@@ -424,13 +373,98 @@ async function AESmainFlow() {
     return null;
   }
 }
+const public_key_str = `Public Key:
+    n: 3724969921086904802684911572073418678908595591412755410952446844084501835150234267087940684738972472908919389896912918491240333014623672293001138919906621498817604222748391147714922934188745775164333050619424530393478303216522118126513124592085961515668489228622591606639663037749957413394020578516300424238421949990462907972925526486614339263066846221464828836773467957080173655718552448188857268930135875987406714136197921629673017237829620428974415176111752166126593534098405343101241245020584856595081323445644236749281983695271887835939828411555648267785805535681671842026083198404923388477296923896776087396551387450230742542673745973560486963065457350770190946316705610312879689589246968785989392333156526167868780250219324539860621394136122352718283671991361209259173414261793875531557677351886766403632088615549976315899250286717376484008018956891239234290904676735520084359879290546675472242828283528568865279210809
+    g: 3724969921086904802684911572073418678908595591412755410952446844084501835150234267087940684738972472908919389896912918491240333014623672293001138919906621498817604222748391147714922934188745775164333050619424530393478303216522118126513124592085961515668489228622591606639663037749957413394020578516300424238421949990462907972925526486614339263066846221464828836773467957080173655718552448188857268930135875987406714136197921629673017237829620428974415176111752166126593534098405343101241245020584856595081323445644236749281983695271887835939828411555648267785805535681671842026083198404923388477296923896776087396551387450230742542673745973560486963065457350770190946316705610312879689589246968785989392333156526167868780250219324539860621394136122352718283671991361209259173414261793875531557677351886766403632088615549976315899250286717376484008018956891239234290904676735520084359879290546675472242828283528568865279210810
+  `;
+
+  const private_key_str = `Private Key:
+    p: 1593543658222908125460939543744031757360145127552146642922669024506552754808556956748332305416451396082006656409963870835735620085534391166067088647223168209176947611453236307175812315781588156551739718007871766986018790773837507029660983438534980001196568316483256087828231963856321068259345906703890877369179938674537678704479894454179391278561505523406569535678925705249743600553537252318248647100204247538016264012087039700683390460991105247976875098843176979
+    q: 2337538668530064483423405764379838729628994310861432784169629908803762799074169599325393526834075183484529218425852584382858485307130030768621302165238616752784599438975923902172902039074928939511436530446356198771572755968912460659110469902943497302614615125559529825146369837147385060474169082144177569306828687230108808573610007291908424152922912987385003996530509033984822491585387642458612470974701896023084876829016560208232342298956178836928612568461440771
+  `;
+
+  function string_to_private_key(private_key_str) {
+    const lines = private_key_str.split("\n");
+    const p_line = lines.find((line) => line.trim().startsWith("p:")) || null;
+    const q_line = lines.find((line) => line.trim().startsWith("q:")) || null;
+
+    if (p_line && q_line) {
+      const p = bigInt(p_line.split(":")[1].trim());
+      const q = bigInt(q_line.split(":")[1].trim());
+      const n = p.multiply(q);
+      return { p, q, n };
+    } else {
+      throw new Error("Invalid private key string format.");
+    }
+  }
+
+  function string_to_public_key(public_key_str) {
+    const lines = public_key_str.split("\n");
+    const n_line = lines.find((line) => line.trim().startsWith("n:")) || null;
+    const g_line = lines.find((line) => line.trim().startsWith("g:")) || null;
+
+    if (n_line && g_line) {
+      const n = bigInt(n_line.split(":")[1].trim());
+      const g = bigInt(g_line.split(":")[1].trim());
+      return { n, g };
+    } else {
+      throw new Error("Invalid public key string format.");
+    }
+  }
+
+  function encrypt_message(message, public_key) {
+    const { n, g } = public_key;
+    const r = bigInt.randBetween(1, n.minus(1)); // Random value
+    const ciphertext = g
+      .modPow(bigInt(message), n.multiply(n))
+      .multiply(r.modPow(n, n.multiply(n)))
+      .mod(n.multiply(n));
+    return ciphertext;
+  }
+
+  function L(u, n) {
+    return u.subtract(1).divide(n);
+  }
+  
+  function decrypt_message(ciphertext, private_key) {
+    const { p, q, n } = private_key;
+    const nsquare = n.multiply(n);
+  
+    // Step 1: λ = lcm(p-1, q-1)
+    const lambda = bigInt.lcm(p.subtract(1), q.subtract(1));
+  
+    // Step 2: u = g^λ mod n^2
+    const g = n.add(1); // Assuming g = n + 1, common in simplified Paillier
+    const u = g.modPow(lambda, nsquare);
+  
+    // Step 3: L(u)
+    const l_u = L(u, n);
+  
+    // Step 4: μ = (L(u))^-1 mod n
+    const mu = l_u.modInv(n);
+  
+    // Step 5: Decrypt
+    const c_lambda = ciphertext.modPow(lambda, nsquare);
+    const l_c = L(c_lambda, n);
+    return l_c.multiply(mu).mod(n);
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
 
   
   // Fetch data with signature
   async function fetchData(e) {
     console.log(e);
-    await AESmainFlow()
-
     try {
       const playerId = "player123"; // Example playerId
       const now = new Date();
@@ -448,6 +482,55 @@ async function AESmainFlow() {
       var signature2= await generateSignature2(playerId,timestamp,nonce2)
 
 
+
+
+
+        // Load server keys
+  const keys = await load_server_keys();
+  
+  // Generate client key pair
+  const { client_private_key, client_public_key } = await client_generate_keypair();
+  
+  // Validate server public key
+  if (!(keys.publicKey instanceof CryptoKey)) {
+    console.error("Server public key is not a valid CryptoKey object");
+    throw new Error("Invalid server public key");
+  }
+  
+  
+  // Establish AES key using the server's public key
+  const { aesKey, iv, encryptedPreMasterSecret } = await establishAESKey(
+    client_private_key, 
+    keys.publicKey
+  );
+  
+
+  // Encrypt data using AES-GCM
+  const dataToEncrypt = process.env.REACT_APP_API_AES_Key+"sosis";
+
+  const { ciphertext } = await encryptWithAES(aesKey, iv, dataToEncrypt);
+
+  //decryt data using AES-GCM
+  const decryptedData = await decryptWithAES(aesKey, iv, ciphertext);
+
+
+
+  const ciphertextB64 = bufferToBase64(ciphertext);
+  const ivB64 = bufferToBase64(iv);
+  const encryptedPreMasterSecretB64 = bufferToBase64(encryptedPreMasterSecret);
+
+
+
+
+  const public_key = string_to_public_key(public_key_str);
+  const private_key = string_to_private_key(private_key_str);
+
+  const message = 667262699;
+
+  const encrypted = encrypt_message(message, public_key);
+
+
+
       const response = await fetch(API_URL, {
         method: "GET",
         headers: {
@@ -455,10 +538,15 @@ async function AESmainFlow() {
           "Content-Type": "application/json",
           "player_id": playerId,
           "timestamp": timestamp,
+          "encryptedHomomorphic": encrypted.toString(),
           "nonce": nonce,
           "signature": signature,
           "nonce2": nonce2,
           "signature2": signature2,
+          "ciphertext": ciphertextB64,
+          "iv": ivB64,
+          "encryptedPreMasterSecret": encryptedPreMasterSecretB64,
+     
         },
       });
 
