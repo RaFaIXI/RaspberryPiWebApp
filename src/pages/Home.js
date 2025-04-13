@@ -14,11 +14,17 @@ const API_URL = process.env.REACT_APP_API_URL;
 const API_URL_Generate =process.env.REACT_APP_API_URL2;
 var eazjo="";
 const HomomorphicNumberEncryptedKey = process.env.REACT_APP_API_HomomorphicNumberEncryptedKey;
-const RSAprivate_key_str = process.env.REACT_APP_RSA_PRIVATE_KEY;
-const RSApublicKeyStr  = process.env.REACT_APP_RSA_PUBLIC_KEY;
-const HOMOMORPHICpublic_key_str = process.env.REACT_APP_HOMOMORPHIC_PUBLIC_KEY;
-const HOMOMORPHICprivate_key_str = process.env.REACT_APP_HOMOMORPHIC_PRIVATE_KEY;
 
+const HOMOMORPHICpublic_key_str = process.env.REACT_APP_HOMOMORPHIC_PUBLIC_KEY;
+
+
+
+const AESRSAprivate_key_str = process.env.REACT_APP_AESRSA_PRIVATE_KEY;
+
+
+const AESRSApublicKeyStr  = process.env.REACT_APP_AESRSA_PUBLIC_KEY;
+
+const ReturnRSAprivate_key_str=process.env.REACT_APP_ReturnRSA_PRIVATE_KEY;
 
 
 async function generateSignature2(playerId, timestamp, nonce) {
@@ -502,7 +508,7 @@ function bufferToBase64(buffer) {
 
 
         // Load server keys
-  const keys = await load_server_keys(RSAprivate_key_str,RSApublicKeyStr);
+  const keys = await load_server_keys(AESRSAprivate_key_str,AESRSApublicKeyStr);
   
   // Generate client key pair
   const { client_private_key, client_public_key } = await client_generate_keypair();
@@ -539,7 +545,6 @@ function bufferToBase64(buffer) {
 
 
   const public_key = string_to_public_key(HOMOMORPHICpublic_key_str);
-  const private_key = string_to_private_key(HOMOMORPHICprivate_key_str);
 
 
   const encrypted = encrypt_message(HomomorphicNumberEncryptedKey, public_key);
@@ -570,7 +575,7 @@ function bufferToBase64(buffer) {
       const result = JSON.parse(text);
       
       //decrypt the data using RSA
-      const r2=await RSAdecrypt_messages(result.encrypted_usage_data, RSAprivate_key_str)
+      const r2=await RSAdecrypt_messages(result.encrypted_usage_data, ReturnRSAprivate_key_str)
       const fixedJson = r2.replace(/'/g, '"');
 
       // now parse the fixed string
