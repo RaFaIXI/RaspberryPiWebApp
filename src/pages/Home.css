@@ -11,6 +11,9 @@ body {
   justify-content: center;
 
 }
+.eaderPage1 {
+  margin-top: 110px; /* Adjust the value as needed */
+}
 
 
 h1, h2, h4 {

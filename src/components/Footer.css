@@ -4,6 +4,11 @@ body, html {
     margin: 0;
 }
 
+/* Add a wrapper for the page content */
+.page-content {
+    padding-bottom: 60px; /* Adjust this value based on the footer height */
+}
+
 /* Styles for the footer */
 .footer {
     position: fixed;    /* Fixed position at the bottom of the screen */

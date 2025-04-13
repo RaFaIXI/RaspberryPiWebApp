@@ -488,7 +488,7 @@ function bufferToBase64(buffer) {
   async function fetchData(e) {
     console.log(e);
     try {
-      const playerId = "player123"; // Example playerId
+      const playerId = Math.random().toString(36).substring(2, 7); // Example playerId
       const now = new Date();
       const timestamp = Math.floor(now.getTime() / 1000).toString(); // Get current timestamp in seconds
       const nonce = generateRandomNonce(); // Generate a random nonce
@@ -610,6 +610,9 @@ function bufferToBase64(buffer) {
   return (
     <div>
       <Header />
+      <br />
+      <br />
+      <br />
       <div className="eaderPage1">
         <h1>API Data</h1>
       </div>
@@ -621,6 +624,7 @@ function bufferToBase64(buffer) {
           <Card title="Disk Usage : " value={data.disk_usage} />
           <Card title="RAM Usage : " value={data.ram_usage} />
         </div>
+        CallId : {data.verifiedplayerid}
       </div>
 
       <h2>Reloads : {a}</h2>
@@ -637,6 +641,19 @@ function bufferToBase64(buffer) {
           checked={ischecked}
         />
       </h4>
+      
+
+      <div style={{ marginTop: "2rem", fontStyle: "italic", color: "#555" }}>
+  <strong>Objective for hackers :</strong><br />
+  Display fake values such as:<br />
+  Temperature: 999°C<br />
+  Call ID: "hacked"<br />
+  Hint : Inspecting the page won’t work, you have to hack the requests<br />
+  For help or If you succeed, send a screenshot to discord : rafaixi for €200<br />
+  <br /> <br />
+  <br />
+</div>
+
       <Footer />
     </div>
   );
