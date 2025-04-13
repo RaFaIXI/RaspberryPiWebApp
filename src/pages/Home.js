@@ -6,11 +6,16 @@ import Footer from "../components/Footer";
 import "./Home.css";
 import { Paillier } from 'paillier-bigint';
 import bigInt from "big-integer";
+import {Buffer} from 'buffer';
+const forge = require('node-forge');
 
 
 const API_URL = process.env.REACT_APP_API_URL;
 const API_URL_Generate =process.env.REACT_APP_API_URL2;
 var eazjo="";
+const RSAprivate_key_str = `-----BEGIN RSA PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCwHDHBwuJhpFgrH3YwQHQkLpUoLTj8CINDVOutduQn/zMw0dGuNeWJbKGQR6cPlpnciyvXSRtl45YGoVpYu/g7NW5RYezNhogqcdIZNCOeOcrhpvfodJ9jQ0YRFTJqxt5ttHku39PsHWRps29j7ocgC5gC+//cyJUH+wM8Ay+IucpA8bfqueTA0Bu/1kApE79VX5MxMhvwvlMx4XJcVC2GMHrHlYez6zNeuufxQTSTakekC81K8dieVah66XibVJY4MIVfpU+Xq2f5NDJZ0xsouQufg8nCnDc2U/2hP05tlm9REWCJOqngg+378W0jzWoLSJL21UQt0uUGqM8cPwDjAgMBAAECggEAUxFRdOwYPOc4gUqrRFI6lhB04YkHLnZTd/B35A/GyYjp2/a0GSCp/trDEFuD1On79BefG8KLjlE9pC36gA1VppPqz69Jc54n3yFl8OZzgIARDsPjfn136unCBG/DorLgGs38NRx1iRNKGEN/YJsTmI1va8TyqHDiPuvq2CVGiA4UWDuS6Q/sZONjXo6CdjzqIgFLxAdOa0ilMjljrKb1NMrsZHKvkAc3HAXbgOIWBtL8S73zdqZed+HUgiabzdsXk8XMaaY720DL0tISav1tgTlIK3DNtN4+siEXdKgvLwikfIRBG5uMsmga6Zfo7lngSNHgT+Hh5tpw6NUkuQB+wQKBgQC5rKKECCdNt70xuMZEXQQjOgDg8B8hO1o9e9Z7izasaltwvI3nIxc3TIp5P8EcWJWAesOSv8pIY3fh5DvpD5XQmKgvlp5VP40PfXkZeQnXOJX1O7mWuyaTg9Pox/Cdp+6zSWtqRQIGllq7ziukWqJiDeJXc0Y5qU8QmpJi3O6CwQKBgQDy0DFyP08+5LyaVfPSiGT0inp6cWER0TIC4VRGwupmlufdlMMMa+LrSWftFSu/uhAeHU8s1CPn+l40iHuMqxqOQ0t/hA/2laTsK15eMGat1OBXBkv34KYikNm3A5IPtF6AZebIrrTysUdmYRPcjSuwPxHga4ltlRiACUXkP5HAowKBgH7ARjVB56rbarF9xQO4R/HQT/c+lNG31dOxLWsrTwiGlqOwZGLMhrW+b610A11Zb73EkKwmd23RUW6IwwlIFWrQO8g41x+1AZP4gOoNwdUFkQFXY0ttuVjsnoYDr9PAZ2hHD6f9MfPTQl+A0DQjl0S+26v9Soxkc1APZS1OSxhBAoGBAI2djWkzsXVeFP3yqX0d3bueVGa7X8DzgLabUvreTbW9x8e9LrE87yEJNBrbYSO2UhYuQ/JCXBq9NFpxS5W0aY2VhCAAFwtbJdA0TxqiIhC6eolm+8G7fUnlr4UFCRgtu3wpcpuTAagWay0z61CT6Womrrd0ILgP4DU0s1W3Gbv/AoGBALQmB0Ri0iPlhrCEc1LD6siSpevxaixdw1ygXt9c7gDBLI4NmskR5uEHHfIbthFdZV0sbO6iEuQOR6c8/QaTbw8q36fVXc4MZQrg4W4/s5lO5q2rtO5y373d+qtRnQ5shc2P7FN0Sxm9hkl+r6OuS5QASLFItcqswlR8x60q5+0a
+-----END RSA PRIVATE KEY-----`;
 
 async function generateSignature2(playerId, timestamp, nonce) {
   const message = `${playerId}${timestamp}${nonce}`;
@@ -456,7 +461,22 @@ const public_key_str = `Public Key:
 
 
 
-
+  function RSAdecrypt_messages(encryptedBase64, privateKeyPem) {
+    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+    const encryptedBytes = forge.util.decode64(encryptedBase64);
+  
+    try {
+      return privateKey.decrypt(encryptedBytes, 'RSAES-PKCS1-V1_5');
+    } catch (e1) {
+      console.warn("PKCS1 decryption failed, trying OAEP...");
+      try {
+        return privateKey.decrypt(encryptedBytes, 'RSA-OAEP');
+      } catch (e2) {
+        throw new Error("Both PKCS1 and OAEP decryption failed. Possibly wrong key or corrupted message.");
+      }
+    }
+  }
+  
 
 
 
@@ -553,7 +573,18 @@ const public_key_str = `Public Key:
       const text = await response.text();
       console.log("Raw API Response:", text);
       const result = JSON.parse(text);
-      setData(result);
+      
+      //decrypt the data using RSA
+      const r2=await RSAdecrypt_messages(result.encrypted_usage_data, RSAprivate_key_str)
+      const fixedJson = r2.replace(/'/g, '"');
+
+      // now parse the fixed string
+      const systemUsage = JSON.parse(fixedJson);
+
+
+
+
+      setData(systemUsage);
       setA(prev => prev + 1);
     } catch (error) {
       console.error("Error fetching data:", error);
