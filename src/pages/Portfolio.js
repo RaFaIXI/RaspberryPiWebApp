@@ -7,7 +7,7 @@ const AboutUs = () => {
             <Header />
             <h1>Portfolio</h1>
             <p>
-                Welcome
+                Welcome 
             </p>
             <p>
                 
