@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AboutUs from "./pages/AboutUs";
 import Home from "./pages/Home";
 import ToDoList from "./pages/ToDoList";
-import Portfolio from "./pages/Portfolio";
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/todolist" element={<ToDoList />} />
-        <Route path="/portfolio" element={<Portfolio />} />
 
         
         <Route path="*" element={<Home />} />
