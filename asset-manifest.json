@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/RaspberryPiWebApp/static/css/main.d2c79aec.css",
-    "main.js": "/RaspberryPiWebApp/static/js/main.54c73320.js",
+    "main.css": "/RaspberryPiWebApp/static/css/main.d94b4f8f.css",
+    "main.js": "/RaspberryPiWebApp/static/js/main.b7f36a02.js",
     "index.html": "/RaspberryPiWebApp/index.html",
-    "main.d2c79aec.css.map": "/RaspberryPiWebApp/static/css/main.d2c79aec.css.map",
-    "main.54c73320.js.map": "/RaspberryPiWebApp/static/js/main.54c73320.js.map"
+    "main.d94b4f8f.css.map": "/RaspberryPiWebApp/static/css/main.d94b4f8f.css.map",
+    "main.b7f36a02.js.map": "/RaspberryPiWebApp/static/js/main.b7f36a02.js.map"
   },
   "entrypoints": [
-    "static/css/main.d2c79aec.css",
-    "static/js/main.54c73320.js"
+    "static/css/main.d94b4f8f.css",
+    "static/js/main.b7f36a02.js"
   ]
 }
